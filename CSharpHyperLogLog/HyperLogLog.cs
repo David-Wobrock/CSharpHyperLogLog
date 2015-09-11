@@ -18,26 +18,28 @@ namespace CSharpHyperLogLog
         private const int DEFAULT_PRECISION = 16;
         private const int HASH_SIZE = 64;
 
-        // Accuracy of 1.04/sqrt(2^Precision) for now
+        // Accuracy of 1.04/sqrt(2^Precision) for now.
         private readonly int Precision;
         private readonly int m;
-        private int[] registers;
+        // We use the "byte" type because the size of each register must be log2(log2(N)), when cardinalities <= N.
+        // Since  we use hashed values on 64 bits, N = 2^64. So, log2(log2(2^64)) = 6.
+        private byte[] registers;
         private readonly double AlphaMM;
-        private readonly int LastBitsCount;
+        private readonly byte LastBitsCount;
         private readonly ulong LastBitsMask;
 
         /// <summary>
         /// Creates a hyperloglog instance.
         /// </summary>
-        /// <param name="precision">Has a default value.</param>
+        /// <param name="precision">The higher the precision, the higher the accuracy, but also the memory usage</param>
         public HyperLogLog(int precision = DEFAULT_PRECISION)
         {
             Precision = precision; // Also called b in the paper
             m = 1 << precision; // b = log2(m), so m = 2^b
-            registers = new int[m];
+            registers = new byte[m]; // TODO smaller registers. ushort?
             AlphaMM = Alpha * m * m;
 
-            LastBitsCount = HASH_SIZE - Precision;
+            LastBitsCount = Convert.ToByte(HASH_SIZE - Precision);
             LastBitsMask = (1UL << LastBitsCount) - 1;
         }
 
@@ -46,7 +48,30 @@ namespace CSharpHyperLogLog
             return AddHash(Hash(value));
         }
 
-        public ulong Count
+        /// <summary>
+        /// Directly adds a hashed value.
+        /// Can be useful if you don't want to use the default hash algorithm used here (Murmur3)
+        /// </summary>
+        /// <param name="hash">The hashed value</param>
+        /// <returns>True if a register has been altered</returns>
+        public bool AddHash(ulong hash)
+        {
+            ulong firstBits = hash >> LastBitsCount; // Is between 0 and m
+            ulong lastBits = hash & LastBitsMask;
+
+            byte nbLeadingZeros = NumberOfLeadingZeros(lastBits);
+
+            // Returns true if the register has been changed
+            if (registers[firstBits] >= nbLeadingZeros)
+                return false;
+            registers[firstBits] = nbLeadingZeros;
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the cardinality of the set
+        /// </summary>
+        public ulong Cardinality
         {
             get
             {
@@ -70,24 +95,13 @@ namespace CSharpHyperLogLog
             }
         }
 
-        /// <summary>
-        /// Directly adds a hashed value.
-        /// Can be useful if you don't want to use the default hash algorithm used here (Murmur3)
-        /// </summary>
-        /// <param name="hash">The hashed value</param>
-        /// <returns>True if a register has been altered</returns>
-        public bool AddHash(ulong hash)
+        public static ulong Count<T>(IEnumerable<T> values, int precision = DEFAULT_PRECISION)
         {
-            ulong firstBits = hash >> LastBitsCount; // Is between 0 and m
-            ulong lastBits = hash & LastBitsMask;
+            HyperLogLog hll = new HyperLogLog(precision);
+            // TODO parallel ?
+            values.ToList().ForEach(v => hll.Add(v));
 
-            int nbLeadingZeros = NumberOfLeadingZeros(lastBits);
-
-            // Returns true if the register has been changed
-            if (registers[firstBits] >= nbLeadingZeros)
-                return false;
-            registers[firstBits] = nbLeadingZeros;
-            return true;
+            return hll.Cardinality;
         }
 
         private double Alpha
@@ -113,9 +127,9 @@ namespace CSharpHyperLogLog
         /// </summary>
         /// <param name="nb"></param>
         /// <returns>Number of leading zeros + 1 (see paper)</returns>
-        private int NumberOfLeadingZeros(ulong nb)
+        private byte NumberOfLeadingZeros(ulong nb)
         {
-            return LastBitsCount - Convert.ToString((long)nb, 2).Length + 1;
+            return Convert.ToByte(LastBitsCount - Convert.ToString((long)nb, 2).Length + 1);
         }
 
         private static ulong Hash(object entry)
