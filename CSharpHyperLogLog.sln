@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpHyperLogLog", "CSharpHyperLogLog\CSharpHyperLogLog.csproj", "{BA05A5E5-9C2B-4ADC-99AF-511E0F6EA608}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpHyperLogLog_Tests", "CSharpHyperLogLog_Tests\CSharpHyperLogLog_Tests.csproj", "{9971E423-B979-4266-8769-F868AC22C1B9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BA05A5E5-9C2B-4ADC-99AF-511E0F6EA608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA05A5E5-9C2B-4ADC-99AF-511E0F6EA608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA05A5E5-9C2B-4ADC-99AF-511E0F6EA608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA05A5E5-9C2B-4ADC-99AF-511E0F6EA608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9971E423-B979-4266-8769-F868AC22C1B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9971E423-B979-4266-8769-F868AC22C1B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9971E423-B979-4266-8769-F868AC22C1B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9971E423-B979-4266-8769-F868AC22C1B9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
