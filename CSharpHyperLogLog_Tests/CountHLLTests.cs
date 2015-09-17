@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpHyperLogLog;
+using System.Collections.Generic;
 
 namespace CSharpHyperLogLog_Tests
 {
@@ -9,19 +10,41 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void BasicCountTest()
         {
-            HyperLogLog hll = new HyperLogLog();
+            HyperLogLog hll = new HyperLogLog(14);
             Assert.IsTrue(hll.Add(1), "should alter a register");
             Assert.IsTrue(hll.Add(2), "should alter a register");
             Assert.IsTrue(hll.Add(3), "should alter a register");
             Assert.IsTrue(hll.Add(4), "should alter a register");
 
-            Assert.AreEqual(4UL, hll.Count, "should count 4 elements");
+            Assert.AreEqual(4UL, hll.Cardinality, "should count 4 elements");
+
+            Assert.IsTrue(hll.Add(5), "should alter a register");
+            Assert.AreEqual(5UL, hll.Cardinality, "should count 5 elements");
+        }
+
+        [TestMethod]
+        public void myTest()
+        {
+            HyperLogLog hllNormal = new HyperLogLog(16);
+            HyperLogLog hllPlus = new HyperLogLog(16, 20);
+            /*hll.AddHash(3384900212040232317);
+            hll.AddHash(3470519952522631238);
+            hll.AddHash(2650105551458109000);*/
+            const ulong NB = 300000;
+            for (ulong i = 0; i < NB; ++i)
+            {
+                hllNormal.Add(i);
+                hllPlus.Add(i);
+            }
+            ulong normal = hllNormal.Cardinality;
+            ulong plus = hllPlus.Cardinality;
+            System.Diagnostics.Debugger.Break();
         }
 
         [TestMethod]
         public void CountWithDuplicatesTest()
         {
-            HyperLogLog hll = new HyperLogLog();
+            HyperLogLog hll = new HyperLogLog(14);
 
             // Add ones
             Assert.IsTrue(hll.Add(1), "should alter a register");
@@ -41,13 +64,13 @@ namespace CSharpHyperLogLog_Tests
             // Re-add 1
             Assert.IsFalse(hll.Add(1), "should not alter a register");
 
-            Assert.AreEqual(4UL, hll.Count, "should count 4 elements");
+            Assert.AreEqual(4UL, hll.Cardinality, "should count 4 elements");
         }
 
         [TestMethod]
         public void CountHashedValuesTest()
         {
-            HyperLogLog hll = new HyperLogLog();
+            HyperLogLog hll = new HyperLogLog(14);
 
             // Murmur3 hashes
             ulong hash1 = 3384900212040232317; // a
@@ -61,7 +84,24 @@ namespace CSharpHyperLogLog_Tests
             // First hash corresponds to Murmur3 hash of "a"
             Assert.IsFalse(hll.Add("a"), "should not alter a register");
 
-            Assert.AreEqual(3UL, hll.Count, "should count 3 elements");
+            Assert.AreEqual(3UL, hll.Cardinality, "should count 3 elements");
+        }
+
+        [TestMethod]
+        public void CountListTest()
+        {
+            IList<string> testList = new List<string>()
+            {
+                "a",
+                "a",
+                "b",
+                "c",
+                "d",
+                "e",
+                "d"
+            };
+
+            Assert.AreEqual(5UL, HyperLogLog.Count<string>(testList), "should count 5 elements");
         }
     }
 }
