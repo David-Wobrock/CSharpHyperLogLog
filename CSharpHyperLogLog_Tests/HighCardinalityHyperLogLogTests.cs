@@ -5,7 +5,7 @@ using CSharpHyperLogLog;
 namespace CSharpHyperLogLog_Tests
 {
     [TestClass]
-    public class HighCardinalityHLLTests
+    public class HighCardinalityHyperLogLogTests
     {
         [TestMethod]
         public void OneMillionDifferentElements()

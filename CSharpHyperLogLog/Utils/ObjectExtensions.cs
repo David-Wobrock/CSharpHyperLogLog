@@ -3,8 +3,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CSharpHyperLogLog.Utils
 {
-    public static class ObjectExtensions
+    internal static class ObjectExtensions
     {
+        /// <summary>
+        /// Converts any object to a byte array.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>A byte array or null if obj was null</returns>
         public static byte[] ToByteArray(this object obj)
         {
             if (obj == null)

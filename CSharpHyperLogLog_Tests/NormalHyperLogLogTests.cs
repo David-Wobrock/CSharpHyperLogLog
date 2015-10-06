@@ -1,14 +1,16 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpHyperLogLog;
 using System.Collections.Generic;
+using System;
+using CSharpHyperLogLog.Utils;
 
 namespace CSharpHyperLogLog_Tests
 {
     [TestClass]
-    public class CountHLLTests
+    public class NormalHyperLogLogTests
     {
         [TestMethod]
-        public void BasicCountTest()
+        public void HllNormalBasicCountTest()
         {
             HyperLogLog hll = new HyperLogLog(14);
             Assert.IsTrue(hll.Add(1), "should alter a register");
@@ -23,26 +25,7 @@ namespace CSharpHyperLogLog_Tests
         }
 
         [TestMethod]
-        public void myTest()
-        {
-            HyperLogLog hllNormal = new HyperLogLog(16);
-            HyperLogLog hllPlus = new HyperLogLog(16, 20);
-            /*hll.AddHash(3384900212040232317);
-            hll.AddHash(3470519952522631238);
-            hll.AddHash(2650105551458109000);*/
-            const ulong NB = 300000;
-            for (ulong i = 0; i < NB; ++i)
-            {
-                hllNormal.Add(i);
-                hllPlus.Add(i);
-            }
-            ulong normal = hllNormal.Cardinality;
-            ulong plus = hllPlus.Cardinality;
-            System.Diagnostics.Debugger.Break();
-        }
-
-        [TestMethod]
-        public void CountWithDuplicatesTest()
+        public void HllNormalCountWithDuplicatesTest()
         {
             HyperLogLog hll = new HyperLogLog(14);
 
@@ -88,7 +71,7 @@ namespace CSharpHyperLogLog_Tests
         }
 
         [TestMethod]
-        public void CountListTest()
+        public void HllNormalCountListTest()
         {
             IList<string> testList = new List<string>()
             {
@@ -101,7 +84,7 @@ namespace CSharpHyperLogLog_Tests
                 "d"
             };
 
-            Assert.AreEqual(5UL, HyperLogLog.Count<string>(testList), "should count 5 elements");
+            Assert.AreEqual(5UL, HyperLogLog.Count<string>(testList, 14), "should count 5 elements");
         }
     }
 }
