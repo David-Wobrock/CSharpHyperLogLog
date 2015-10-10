@@ -21,8 +21,20 @@ namespace CSharpHyperLogLog_Tests
                     hll.Add(i);
 
                 double delta = TestsHelper.GetDelta(expected, p);
-                Assert.AreEqual(expected, hll.Cardinality, delta, "should be approximately equal (precision {0} and delta {1})", p, delta);
+                TestsHelper.AssertRelativeError(expected, hll.Cardinality);
             }
+        }
+
+        [TestMethod]
+        public void myTest()
+        {
+            HyperLogLog hll = new HyperLogLog(18);
+            for (ulong j = 0; j < 200UL; ++j)
+            {
+                hll.Add(j);
+                ulong temp = hll.Cardinality;
+            }
+            TestsHelper.AssertRelativeError(200UL, hll.Cardinality);
         }
 
         [TestMethod]
@@ -42,7 +54,7 @@ namespace CSharpHyperLogLog_Tests
                 }
             }
 
-            // Below 0
+            // Above 0 but too small
             for (int i = 0; i < 4; ++i)
             {
                 try

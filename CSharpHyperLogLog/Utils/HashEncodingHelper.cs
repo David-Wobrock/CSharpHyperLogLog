@@ -62,7 +62,7 @@ namespace CSharpHyperLogLog.Utils
             if (encodedHash.ExtractBits(0, 1) == 1)
             {
                 r = Convert.ToByte((encodedHash >> 1) & 63);
-                idx = encodedHash.ExtractBits(6, Precision + 6);
+                idx = encodedHash.ExtractBits(7, Precision + 7);
             }
             else
             {

@@ -30,7 +30,8 @@ namespace CSharpHyperLogLog
 
         // Sparse representation attributes
         private readonly int SparsePrecision;
-        private int MaxTempSetSize;
+        private readonly int SparseRepresentationThreshold;
+        private readonly int TempSetThreshold;
         private ISet<int> TempSet;
         private ISet<int> SparseSet;
 
@@ -75,8 +76,10 @@ namespace CSharpHyperLogLog
             M = 1 << precision;
             AlphaMM = Alpha * M * M;
 
+            SparseRepresentationThreshold = Convert.ToInt32(0.75 * M); // TODO 6*M or 0.75*M?
+            TempSetThreshold = Convert.ToInt32(0.25 * SparseRepresentationThreshold);
+
             SparsePrecision = sparsePrecision;
-            MaxTempSetSize = 4; // TODO Why ?
             TempSet = new SortedSet<int>();
             SparseSet = new SortedSet<int>();
 
@@ -114,22 +117,11 @@ namespace CSharpHyperLogLog
                     int k = HashEncoder.EncodeHash(hash); // TODO create one instance so do not copy Precision & SP for every value (+ every decoding)
                     bool added = TempSet.Add(k);
                     
-                    if (TempSet.Count >= MaxTempSetSize) // TODO like in java implementation. Good ?
+                    if (TempSet.Count() * 32 >= TempSetThreshold) // TODO like in java implementation. Good ?
                     {
                         MergeTempSetToSparseList();
-
-                        // TODO why 0.75 * M ???
-                        if (SparseSet.Count() > 0.75 * M)
-                        {
-                            ToNormal();
-                        }
-                        else if ((TempSet.Count * 2) < (SparseSet.Count / 4)) // temp set size grows proportionally to sparse set
-                        {
-                            MaxTempSetSize = SparseSet.Count / 4;
-                        }
-
-                        if (TempSet != null)
-                            TempSet.Clear();
+                        if (SparseSet.Count() > SparseRepresentationThreshold)
+                            ToNormalRepresentation();
                     }
                     return added;
 
@@ -185,9 +177,10 @@ namespace CSharpHyperLogLog
                         else
                             H = estimatePrime;
 
-                        // When precision is larger, the threshold is just 5*m
+                        // TODO When precision is larger, the threshold is just 5*m
                         if (((Precision <= 18) && (H < ThresholdData[Precision - 4])) || ((Precision > 18) && (estimate <= (5 * M))))
                         //if (Precision <= 18 && H < ThresholdData[Precision - 4])
+                        //if (H <= ThresholdData[Precision])
                         {
                             return Convert.ToUInt64(H);
                         }
@@ -251,12 +244,14 @@ namespace CSharpHyperLogLog
             // TODO parallel ?
             foreach (int val in TempSet)
                 SparseSet.Add(val);
+
+            TempSet.Clear();
         }
 
         /// <summary>
         /// Converts the current sparse representation to the normal (dense) representation.
         /// </summary>
-        private void ToNormal()
+        private void ToNormalRepresentation()
         {
             Registers = new byte[M];
 

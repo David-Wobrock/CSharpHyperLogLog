@@ -34,19 +34,21 @@ namespace CSharpHyperLogLog_Tests
         }
 
         /// <summary>
-        /// Asserts that the relative error is below 0.1
+        /// Asserts that the relative error is below a certain value (0.1 now)
         /// </summary>
         /// <param name="expected"></param>
         /// <param name="actual"></param>
         /// <param name="message"></param>
         public static void AssertRelativeError(ulong expected, ulong actual, string message = null)
         {
+            const double testedRelativeError = 0.1;
+
             double realError = (actual > expected ? actual - expected : expected - actual) / (double)expected;
 
             if (string.IsNullOrWhiteSpace(message))
-                message = string.Format("{0} error should be lower than 0.1", realError);
+                message = string.Format("{0} error should be lower than {1}", realError, testedRelativeError);
 
-            Assert.IsTrue(realError < 0.1, message);
+            Assert.IsTrue(realError < testedRelativeError, message);
         }
     }
 }
