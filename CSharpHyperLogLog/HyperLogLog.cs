@@ -10,13 +10,14 @@ namespace CSharpHyperLogLog
     /// <summary>
     /// Based on Philippe Flajolet's algorithm : http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
     /// Improvements based on Google engineer's publication : http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40671.pdf
+    /// And the appendix to this publication : http://goo.gl/iU8Ig
     /// Helped and inspired by : https://github.com/addthis/stream-lib HyperLogLog and HyperLogLogPlus implementations
     /// </summary>
     public class HyperLogLog
     {
         private static readonly Murmur3 MurmurHasher = new Murmur3();
         private readonly HashEncodingHelper HashEncoder;
-        private static readonly double[] ThresholdData = new double[] { 10, 20, 40, 80, 220, 400, 900, 1800, 3100, 6500, 15500, 20000, 50000, 120000, 350000 };
+        private static readonly double[] ThresholdData = new double[] { 10, 20, 40, 80, 220, 400, 900, 1800, 3100, 6500, 11500, 20000, 50000, 120000, 350000 };
 
         // Accuracy of 1.04/sqrt(2^Precision) for now.
         private readonly int Precision;
@@ -63,12 +64,13 @@ namespace CSharpHyperLogLog
         /// <summary>
         /// Creates a hyperloglog++ instance.
         /// </summary>
-        /// <param name="precision">The higher the precision, the higher the accuracy, but also the memory usage. Must be in [4, sparsePrecision].</param>
+        /// <param name="precision">The higher the precision, the higher the accuracy, but also the memory usage. Must be in [4, max(28, sparsePrecision)].</param>
         /// <param name="sparsePrecision">The precision of the sparse representation. Must be inferior or equal to 64.</param>
         public HyperLogLog(int precision, int sparsePrecision)
         {
-            if (precision < 4 || precision > sparsePrecision)
-                throw new ArgumentException(string.Format("The precision {0} must be between 4 and {1} (sparse precision)", precision, sparsePrecision));
+            int precisionLimit = Math.Min(sparsePrecision, 28);
+            if (precision < 4 || precision > precisionLimit)
+                throw new ArgumentException(string.Format("The precision {0} must be between 4 and {1}", precision, precisionLimit));
             if (sparsePrecision > 64)
                 throw new ArgumentException(string.Format("The sparse precision {0} must be inferior or equal to 64.", sparsePrecision));
 
@@ -114,10 +116,10 @@ namespace CSharpHyperLogLog
                     return UpdateIfGreater(ref Registers[firstBits], nbLeadingZeros);
 
                 case HyperLogLogRepresentation.Sparse:
-                    int k = HashEncoder.EncodeHash(hash); // TODO create one instance so do not copy Precision & SP for every value (+ every decoding)
+                    int k = HashEncoder.EncodeHash(hash);
                     bool added = TempSet.Add(k);
                     
-                    if (TempSet.Count() * 32 >= TempSetThreshold) // TODO like in java implementation. Good ?
+                    if (TempSet.Count() >= TempSetThreshold) // TODO like in java implementation. Good ?
                     {
                         MergeTempSetToSparseList();
                         if (SparseSet.Count() > SparseRepresentationThreshold)

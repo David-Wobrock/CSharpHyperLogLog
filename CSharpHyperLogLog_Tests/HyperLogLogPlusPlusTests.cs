@@ -30,12 +30,11 @@ namespace CSharpHyperLogLog_Tests
         {
             HyperLogLog hllPlus = new HyperLogLog(16, 25);
 
-            const ulong NB = 300000;
+            const ulong NB = 1000000;
             for (ulong i = 0; i < NB; ++i)
                 hllPlus.Add(i);
 
-            ulong result = hllPlus.Cardinality;
-            Assert.AreEqual(NB, result, TestsHelper.GetDelta(NB, 16), "should have converted to a normal/dense representation");
+            TestsHelper.AssertRelativeError(NB, hllPlus.Cardinality, "should have converted to a normal/dense representation");
         }
 
         [TestMethod]

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CSharpHyperLogLog_Tests")]
 namespace CSharpHyperLogLog.Utils
 {
     internal class HashEncodingHelper
@@ -20,7 +22,8 @@ namespace CSharpHyperLogLog.Utils
             PrecisionRemainder = IntExtensions.LONG_SIZE - Precision;
             SparsePrecisionRemainder = IntExtensions.LONG_SIZE - sparsePrecision;
 
-            PrecisionDifference = sparsePrecision - precision;
+            int precisionDifference = sparsePrecision - precision;
+            PrecisionDifference = precisionDifference <= 1 ? 2 : precisionDifference;
         }
 
         /// <summary>

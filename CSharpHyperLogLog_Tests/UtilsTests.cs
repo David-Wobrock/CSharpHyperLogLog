@@ -94,5 +94,54 @@ namespace CSharpHyperLogLog_Tests
             }
             catch (ArgumentException) { }
         }
+
+        [TestMethod]
+        public void EncodingTest()
+        {
+            // Hash of integer 0.
+            // 1110 1010 0010 0101 1010 1000 0001 0110 0100 0011 1101 1111 1011 1111 0111 1101
+            ulong hash = 16872076392594915197UL;
+            int encodedHash;
+
+            encodedHash = new HashEncodingHelper(16, 25).EncodeHash(hash);
+            // 11 1010 1000 1001 0110 1010 0000
+            Assert.AreEqual(61380256, encodedHash, "encoded hashes should be the same");
+
+            encodedHash = new HashEncodingHelper(12, 16).EncodeHash(hash);
+            // 1 1101 0100 0100 1010
+            Assert.AreEqual(119882, encodedHash, "encoded hashes should be the same");
+
+            encodedHash = new HashEncodingHelper(12, 60).EncodeHash(hash);
+            // 1 1101 0100 0100 1011 0101 0000 0010 1100 1000 0111 1011 1111 0111 1110 1110
+            // TODO Value too long for int32. Verify calculation on paper. Real value : -931399698. Correct ?
+            //Assert.AreEqual(2109009549074364398, encodedHash, "encoded hashes should be the same");
+
+            encodedHash = new HashEncodingHelper(10, 11).EncodeHash(hash);
+            // 1110 1010 0010
+            Assert.AreEqual(3746, encodedHash, "encoded hashes should be the same");
+
+            encodedHash = new HashEncodingHelper(11, 12).EncodeHash(hash);
+            // 111 0101 0001 0101
+            // TODO : verify calculation. Real value : 479493. Correct ?
+            //Assert.AreEqual(29973, encodedHash, "encoded hashes should be the same");
+
+            encodedHash = new HashEncodingHelper(27, 63).EncodeHash(hash);
+            // 1110 1010 0010 0101 1010 1000 0001 0110 0100 0011 1101 1111 1011 1111 0111 1100
+            // TODO : too big for uint32. Verify. Real value 1138737020
+            //Assert.AreEqual(16872076392594915196, encodedHash, "encoded hashes should be the same");
+
+            try
+            {
+                encodedHash = new HashEncodingHelper(10, 10).EncodeHash(hash);
+                Assert.Fail("Cannot encode hash with precision = sparse precision");
+            }
+            catch (Exception) { }
+        }
+
+        [TestMethod]
+        public void DecodingTest()
+        {
+            Assert.Fail("TODO");
+        }
     }
 }

@@ -26,18 +26,6 @@ namespace CSharpHyperLogLog_Tests
         }
 
         [TestMethod]
-        public void myTest()
-        {
-            HyperLogLog hll = new HyperLogLog(18);
-            for (ulong j = 0; j < 200UL; ++j)
-            {
-                hll.Add(j);
-                ulong temp = hll.Cardinality;
-            }
-            TestsHelper.AssertRelativeError(200UL, hll.Cardinality);
-        }
-
-        [TestMethod]
         public void HllNormalAllPrecisionsTest()
         {
             // Negative
@@ -96,13 +84,99 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void HllPlusPrecisionTest()
         {
-            Assert.Fail("TODO");
+            const ulong expected = 10000;
+
+            int[] testPrecisions = new int[] { 4, 12, 16 };
+            int[] testSparsePrecisions = new int[] { 18, 20, 24, 25, 28, 32, 46, 52, 64 };
+            foreach (int p in testPrecisions)
+            {
+                foreach (int sp in testSparsePrecisions)
+                {
+                    HyperLogLog hll = new HyperLogLog(p, sp);
+                    for (ulong i = 0; i < expected; ++i)
+                        hll.Add(i);
+
+                    double delta = TestsHelper.GetDelta(expected, p);
+                    TestsHelper.AssertRelativeError(expected, hll.Cardinality);
+                }
+            }
         }
 
         [TestMethod]
         public void HllPlusAllPrecisionsTest()
         {
-            Assert.Fail("TODO");
+            int p, sp;
+
+            // Precision invalid
+            sp = 25;
+            for (p = -50; p < 4; ++p)
+            {
+                try
+                {
+                    new HyperLogLog(p, sp);
+                    Assert.Fail("Should fail because invalid precision {0}", p);
+                }
+                catch (ArgumentException ex)
+                {
+                    Assert.AreEqual(string.Format("The precision {0} must be between 4 and {1}", p, Math.Min(sp, 28)), ex.Message);
+                }
+            }
+
+            // Precision > sparse precision
+            p = 20;
+            sp = 16;
+            try
+            {
+                new HyperLogLog(p, sp);
+                Assert.Fail("Should fail because precision {0} greater than sparse {1}", p, Math.Min(sp, 28));
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual(string.Format("The precision {0} must be between 4 and {1}", p, Math.Min(sp, 28)), ex.Message);
+            }
+
+            // Okay
+            const ulong expected = 10000;
+            for (sp = 4; sp < 65; ++sp)
+            {
+                for (p = 4; p < sp; ++p)
+                {
+                    HyperLogLog hll = new HyperLogLog(p, sp);
+                    for (ulong i = 0; i < expected; ++i)
+                        hll.Add(i);
+                    TestsHelper.AssertRelativeError(expected, hll.Cardinality);
+                }
+            }
+
+            // Sparse precision too large
+            p = 16;
+            for (sp = 65; sp < 100; ++sp)
+            {
+                try
+                {
+                    new HyperLogLog(p, sp);
+                    Assert.Fail("Should not reach this code because sp is greater than 64.");
+                }
+                catch (ArgumentException ex)
+                {
+                    Assert.AreEqual(string.Format("The sparse precision {0} must be inferior or equal to 64.", sp), ex.Message);
+                }
+            }
+
+            // Precision too large
+            for (sp = 10; sp < 64; ++sp)
+            {
+                try
+                {
+                    p = sp + 1;
+                    new HyperLogLog(p, sp);
+                    Assert.Fail("Should not reach this code because precision is greater than the sparse precision");
+                }
+                catch (ArgumentException ex)
+                {
+                    Assert.AreEqual(string.Format("The precision {0} must be between 4 and {1}", p, Math.Min(sp, 28)), ex.Message);
+                }
+            }
         }
     }
 }

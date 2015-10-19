@@ -41,7 +41,7 @@ namespace CSharpHyperLogLog_Tests
         /// <param name="message"></param>
         public static void AssertRelativeError(ulong expected, ulong actual, string message = null)
         {
-            const double testedRelativeError = 0.1;
+            const double testedRelativeError = 0.15;
 
             double realError = (actual > expected ? actual - expected : expected - actual) / (double)expected;
 

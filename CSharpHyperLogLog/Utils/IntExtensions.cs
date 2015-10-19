@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("CSharpHyperLogLog_Tests")]
 namespace CSharpHyperLogLog.Utils
 {
     /// <summary>
     /// Partially based on http://blog.teamleadnet.com/2012/08/murmurhash3-ultra-fast-hash-algorithm.html
     /// </summary>
-    public static class IntExtensions
+    internal static class IntExtensions
     {
         public const int LONG_SIZE = 64;
         public const int INT_SIZE = 32;
@@ -98,7 +100,7 @@ namespace CSharpHyperLogLog.Utils
             if (maxSize < 0)
                 throw new ArgumentException("Maximal size of number cannot be negative.");
             if (maxSize > INT_SIZE)
-                throw new ArgumentException("Maximal size of the number cannot be greater than {0}", INT_SIZE.ToString());
+                throw new ArgumentException(string.Format("Maximal size of the number cannot be greater than {0}", INT_SIZE.ToString()));
 
             return Convert.ToByte(maxSize - Convert.ToString(nb, 2).Length + 1);
         }
