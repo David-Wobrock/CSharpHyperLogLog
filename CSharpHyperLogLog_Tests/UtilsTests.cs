@@ -98,7 +98,7 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void EncodingTest()
         {
-            // Hash of integer 0.
+            // Hash of integer "0".
             // 1110 1010 0010 0101 1010 1000 0001 0110 0100 0011 1101 1111 1011 1111 0111 1101
             ulong hash = 16872076392594915197UL;
             int encodedHash;
@@ -112,23 +112,20 @@ namespace CSharpHyperLogLog_Tests
             Assert.AreEqual(119882, encodedHash, "encoded hashes should be the same");
 
             encodedHash = new HashEncodingHelper(12, 60).EncodeHash(hash);
-            // 1 1101 0100 0100 1011 0101 0000 0010 1100 1000 0111 1011 1111 0111 1110 1110
-            // TODO Value too long for int32. Verify calculation on paper. Real value : -931399698. Correct ?
-            //Assert.AreEqual(2109009549074364398, encodedHash, "encoded hashes should be the same");
+            // 1100 1000 0111 1011 1111 0111 1110 1110
+            Assert.AreEqual(3363567598, (UInt32)encodedHash, "encoded hashes should be the same");
 
             encodedHash = new HashEncodingHelper(10, 11).EncodeHash(hash);
             // 1110 1010 0010
             Assert.AreEqual(3746, encodedHash, "encoded hashes should be the same");
 
             encodedHash = new HashEncodingHelper(11, 12).EncodeHash(hash);
-            // 111 0101 0001 0101
-            // TODO : verify calculation. Real value : 479493. Correct ?
-            //Assert.AreEqual(29973, encodedHash, "encoded hashes should be the same");
+            // 111 0101 0001 0000 0101
+            Assert.AreEqual(479493, encodedHash, "encoded hashes should be the same");
 
             encodedHash = new HashEncodingHelper(27, 63).EncodeHash(hash);
-            // 1110 1010 0010 0101 1010 1000 0001 0110 0100 0011 1101 1111 1011 1111 0111 1100
-            // TODO : too big for uint32. Verify. Real value 1138737020
-            //Assert.AreEqual(16872076392594915196, encodedHash, "encoded hashes should be the same");
+            // 0100 0011 1101 1111 1011 1111 0111 1100
+            Assert.AreEqual(1138737020U, (UInt32)encodedHash, "encoded hashes should be the same");
 
             try
             {
@@ -136,10 +133,39 @@ namespace CSharpHyperLogLog_Tests
                 Assert.Fail("Cannot encode hash with precision = sparse precision");
             }
             catch (Exception) { }
+
+            // 2158 = 1000 0110 1110
+            // Encoded hash : 35 = 0010 0011
+            encodedHash = new HashEncodingHelper(35, 36).EncodeHash(2158);
+            Assert.AreEqual(35, encodedHash, "encoded hashes should be the same");
         }
 
         [TestMethod]
         public void DecodingTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [TestMethod]
+        public void EstimateBiasTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [TestMethod]
+        public void CalculateDistancesTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [TestMethod]
+        public void NearestNeighborsTest()
+        {
+            Assert.Fail("TODO");
+        }
+
+        [TestMethod]
+        public void BiasTest()
         {
             Assert.Fail("TODO");
         }
