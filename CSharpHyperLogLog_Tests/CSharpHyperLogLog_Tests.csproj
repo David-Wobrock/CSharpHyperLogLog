@@ -55,6 +55,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="HyperLogLogPlusPlusTests.cs" />
+    <Compile Include="MergeTests.cs" />
     <Compile Include="NormalHyperLogLogTests.cs" />
     <Compile Include="TestsHelper.cs" />
     <Compile Include="PrecisionsTests.cs" />

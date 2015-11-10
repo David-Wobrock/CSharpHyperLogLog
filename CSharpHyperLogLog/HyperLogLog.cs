@@ -117,19 +117,25 @@ namespace CSharpHyperLogLog
 
                 case HyperLogLogRepresentation.Sparse:
                     int k = HashEncoder.EncodeHash(hash);
-                    bool added = TempSet.Add(k);
-                    
-                    if (TempSet.Count() >= TempSetThreshold) // TODO like in java implementation. Good ?
-                    {
-                        MergeTempSetToSparseList();
-                        if (SparseSet.Count() > SparseRepresentationThreshold)
-                            ToNormalRepresentation();
-                    }
-                    return added;
+                    return AddEncodedHash(k);
 
                 default:
                     throw new Exception("Should not reach this code. Invalid hyperloglog representation");
             }
+        }
+
+        private bool AddEncodedHash(int encodedHash)
+        {
+            bool added = TempSet.Add(encodedHash);
+
+            if (TempSet.Count() >= TempSetThreshold) // TODO like in java implementation. Good ?
+            {
+                MergeTempSetToSparseList();
+                if (SparseSet.Count() > SparseRepresentationThreshold)
+                    ToNormalRepresentation();
+            }
+
+            return added;
         }
 
         /// <summary>
@@ -139,8 +145,33 @@ namespace CSharpHyperLogLog
         /// <returns>True if at least one register has been altered</returns>
         public bool Merge(HyperLogLog hll)
         {
-            // TODO
-            return false;
+            // TODO : tests + comments
+
+            if (Format != hll.Format)
+                throw new ArgumentException("Both hyperloglog instances must have the same representation.");
+            if (Precision != hll.Precision)
+                throw new ArgumentException("Both hyperloglog instances must have the same precision");
+            if (Format == HyperLogLogRepresentation.Sparse && SparsePrecision != hll.SparsePrecision)
+                throw new ArgumentException("Both hyperloglog instances must have the same sparse precision");
+
+            bool modified = false;
+
+            switch (Format)
+            {
+                case HyperLogLogRepresentation.Normal:
+                    for (int i = 0; i < hll.Registers.Count(); ++i)
+                        if (UpdateIfGreater(ref Registers[i], hll.Registers[i]))
+                            modified = true;
+                    break;
+
+                case HyperLogLogRepresentation.Sparse:
+                    hll.MergeTempSetToSparseList();
+                    foreach (int encodedVal in hll.SparseSet)
+                        if (AddEncodedHash(encodedVal))
+                            modified = true;
+                    break;
+            }
+            return modified;
         }
 
         /// <summary>

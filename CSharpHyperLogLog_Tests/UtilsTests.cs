@@ -13,7 +13,7 @@ namespace CSharpHyperLogLog_Tests
         public void ExtractBitsTest()
         {
             // 1001 1110 1101 0110 1110 1011 0101 0110 0101 0111 1000 1000 1110 0011 1001 0111
-            ulong initial = 11445594259076998039UL;
+            const ulong initial = 11445594259076998039UL;
             ulong expected;
 
             // 1001 1110 (left bits)
