@@ -139,7 +139,8 @@ namespace CSharpHyperLogLog
         }
 
         /// <summary>
-        /// 
+        /// Fusions two hyperloglog instances that actual have the same representation.
+        /// The precision (and sparse precision if sparse reprensentation) must have the same value. Otherwise an ArgumentException is thrown.
         /// </summary>
         /// <param name="hll"></param>
         /// <returns>True if at least one register has been altered</returns>

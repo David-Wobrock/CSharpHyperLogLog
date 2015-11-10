@@ -12,7 +12,7 @@ namespace CSharpHyperLogLog.Utils
         private readonly int PrecisionRemainder;
         private readonly int SparsePrecisionRemainder;
 
-        private readonly int PrecisionDifference;
+        private readonly byte PrecisionDifference;
 
         internal HashEncodingHelper(int precision, int sparsePrecision)
         {
@@ -22,8 +22,7 @@ namespace CSharpHyperLogLog.Utils
             PrecisionRemainder = IntExtensions.LONG_SIZE - Precision;
             SparsePrecisionRemainder = IntExtensions.LONG_SIZE - sparsePrecision;
 
-            int precisionDifference = sparsePrecision - precision;
-            PrecisionDifference = precisionDifference <= 1 ? 2 : precisionDifference;
+            PrecisionDifference = (byte)(sparsePrecision - precision);
         }
 
         /// <summary>
@@ -64,12 +63,12 @@ namespace CSharpHyperLogLog.Utils
         {
             if (encodedHash.ExtractBits(0, 1) == 1)
             {
-                r = Convert.ToByte((encodedHash >> 1) & 63);
+                r = Convert.ToByte(((encodedHash >> 1) & 63) + PrecisionDifference);
                 idx = encodedHash.ExtractBits(7, Precision + 7);
             }
             else
             {
-                r = encodedHash.ExtractBits(1, PrecisionDifference).NumberOfLeadingZeros(PrecisionDifference - 1);
+                r = encodedHash.ExtractBits(1, PrecisionDifference).NumberOfLeadingZeros(PrecisionDifference - 2);
                 idx = encodedHash.ExtractBits(1, Precision + 1);
             }
         }

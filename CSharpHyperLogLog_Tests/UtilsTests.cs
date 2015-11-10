@@ -143,7 +143,31 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void DecodingTest()
         {
-            Assert.Fail("TODO");
+            HashEncodingHelper encodingHelper = new HashEncodingHelper(14, 25);
+
+            int encodedHash;
+            int idx;
+            byte r;
+
+            encodedHash = 638739; // 1001 1011 1111 0001 0011
+            encodingHelper.DecodeHash(encodedHash, out idx, out r);
+            Assert.AreEqual(20, r, "decoded value should be as expected"); // 1001 + ToBinary(25 - 14)
+            Assert.AreEqual(4990, idx, "decoded index should be as expected"); // 1 0011 0111 1110
+
+            encodedHash = 3567856; // 11 0110 0111 0000 1111 0000
+            encodingHelper.DecodeHash(encodedHash, out idx, out r);
+            Assert.AreEqual(3, r, "decoded value should be as expected"); // 11
+            Assert.AreEqual(14456, idx, "decoded index should be as expected"); // 11 1000 0111 1000
+
+            encodedHash = 10; // 1010
+            encodingHelper.DecodeHash(encodedHash, out idx, out r);
+            Assert.AreEqual(7, r, "decoded value should be as expected"); // 111
+            Assert.AreEqual(5, idx, "decoded index should be as expected"); // 101
+
+            encodedHash = 265822207; // 1111 1101 1000 0001 1111 1111 1111
+            encodingHelper.DecodeHash(encodedHash, out idx, out r);
+            Assert.AreEqual(74, r, "decoded value should be as expected"); // 11 1111 + ToBinary(25 - 14)
+            Assert.AreEqual(12351, idx, "decoded index should be as expected"); // 11 0000 0011 1111
         }
 
         [TestMethod]
