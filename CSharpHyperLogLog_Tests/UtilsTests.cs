@@ -173,7 +173,15 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void EstimateBiasTest()
         {
-            Assert.Fail("TODO");
+            double NORMAL = EstimateBiasHelper.GetEstimateBias(27.5, 5);
+            double JAVA = EstimateBiasHelper.GetEstimateBias_FromJava(27.5, 5);
+
+
+            double N = EstimateBiasHelper.GetEstimateBias(10546.892313981854, 12);
+            double J = EstimateBiasHelper.GetEstimateBias_FromJava(10546.892313981854, 12);
+            //double MINE = EstimateBiasHelper.MyEstimateBias(27.5, 5);
+            System.Diagnostics.Debugger.Break();
+            Assert.Fail();
         }
 
         [TestMethod]

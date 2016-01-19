@@ -1,18 +1,22 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpHyperLogLog;
-using System.Collections.Generic;
-using System;
-using CSharpHyperLogLog.Utils;
 
 namespace CSharpHyperLogLog_Tests
 {
     [TestClass]
     public class NormalHyperLogLogTests
     {
+        private HyperLogLog hll;
+
+        [TestInitialize]
+        public void InitTests()
+        {
+            hll = new HyperLogLogNormal(14);
+        }
+
         [TestMethod]
         public void HllNormalBasicCountTest()
         {
-            HyperLogLog hll = new HyperLogLog(14);
             Assert.IsTrue(hll.Add(1), "should alter a register");
             Assert.IsTrue(hll.Add(2), "should alter a register");
             Assert.IsTrue(hll.Add(3), "should alter a register");
@@ -27,8 +31,6 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void HllNormalCountWithDuplicatesTest()
         {
-            HyperLogLog hll = new HyperLogLog(14);
-
             // Add ones
             Assert.IsTrue(hll.Add(1), "should alter a register");
             Assert.IsFalse(hll.Add(1), "should not alter a register");
@@ -51,10 +53,8 @@ namespace CSharpHyperLogLog_Tests
         }
 
         [TestMethod]
-        public void CountHashedValuesTest()
+        public void HllNormalCountHashedValuesTest()
         {
-            HyperLogLog hll = new HyperLogLog(14);
-
             // Murmur3 hashes
             ulong hash1 = 3384900212040232317; // a
             ulong hash2 = 3470519952522631238; // b
@@ -68,23 +68,6 @@ namespace CSharpHyperLogLog_Tests
             Assert.IsFalse(hll.Add("a"), "should not alter a register");
 
             Assert.AreEqual(3UL, hll.Cardinality, "should count 3 elements");
-        }
-
-        [TestMethod]
-        public void HllNormalCountListTest()
-        {
-            IList<string> testList = new List<string>()
-            {
-                "a",
-                "a",
-                "b",
-                "c",
-                "d",
-                "e",
-                "d"
-            };
-
-            Assert.AreEqual(5UL, HyperLogLog.Count<string>(testList, 14), "should count 5 elements");
         }
     }
 }

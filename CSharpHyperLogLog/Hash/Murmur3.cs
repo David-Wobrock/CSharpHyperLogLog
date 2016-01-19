@@ -6,18 +6,24 @@ namespace CSharpHyperLogLog.Hash
     /// <summary>
     /// Based on http://blog.teamleadnet.com/2012/08/murmurhash3-ultra-fast-hash-algorithm.html
     /// </summary>
-    public class Murmur3
+    internal class Murmur3 : IHasher
     {
+        ulong IHasher.Hash(object entry)
+        {
+            byte[] hashedEntry = ComputeHash(entry.ToByteArray());
+            return hashedEntry.GetUInt64(0);
+        }
+
         // 128 bit output, 64 bit platform version
 
-        public static ulong READ_SIZE = 16;
+        private static ulong READ_SIZE = 16;
         private static ulong C1 = 0x87c37b91114253d5L;
         private static ulong C2 = 0x4cf5ad432745937fL;
 
         private ulong length;
         private const uint seed = 0;
-        ulong h1;
-        ulong h2;
+        private ulong h1;
+        private ulong h2;
 
         private void MixBody(ulong k1, ulong k2)
         {
@@ -62,10 +68,10 @@ namespace CSharpHyperLogLog.Hash
             return k;
         }
 
-        public byte[] ComputeHash(byte[] bb)
+        private byte[] ComputeHash(byte[] bb)
         {
             ProcessBytes(bb);
-            return Hash;
+            return GetHash;
         }
 
         private void ProcessBytes(byte[] bb)
@@ -160,7 +166,7 @@ namespace CSharpHyperLogLog.Hash
             h2 ^= MixKey2(k2);
         }
 
-        public byte[] Hash
+        private byte[] GetHash
         {
             get
             {

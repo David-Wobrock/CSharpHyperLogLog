@@ -21,7 +21,7 @@ namespace CSharpHyperLogLog_Tests
             return value;
         }
 
-        private void ThreadTask(HyperLogLog hll, int nbIt)
+        private void ThreadTask(HyperLogLog_Old hll, int nbIt)
         {
             for (int i = 0; i < nbIt; ++i)
             {
@@ -37,7 +37,7 @@ namespace CSharpHyperLogLog_Tests
             const int PRECISION = 14;
             ulong expected = NB_THREADS * ITERATIONS;
 
-            HyperLogLog hllThreaded = new HyperLogLog(PRECISION);
+            HyperLogLog_Old hllThreaded = new HyperLogLog_Old(PRECISION);
             // Launch all threads
             IList<Thread> threads = new List<Thread>();
             for (int i = 0; i < NB_THREADS; ++i)
@@ -64,7 +64,7 @@ namespace CSharpHyperLogLog_Tests
             const int SPARSE_PRECISION = 25;
             ulong expected = NB_THREADS * ITERATIONS;
 
-            HyperLogLog hllThreaded = new HyperLogLog(PRECISION, SPARSE_PRECISION);
+            HyperLogLog_Old hllThreaded = new HyperLogLog_Old(PRECISION, SPARSE_PRECISION);
             IList<Thread> threads = new List<Thread>();
             for (int i = 0; i < NB_THREADS; ++i)
             {

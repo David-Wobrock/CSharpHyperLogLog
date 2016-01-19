@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CSharpHyperLogLog.Utils
@@ -9,11 +10,11 @@ namespace CSharpHyperLogLog.Utils
         /// Converts any object to a byte array.
         /// </summary>
         /// <param name="obj"></param>
-        /// <returns>A byte array or null if obj was null</returns>
+        /// <returns>A byte array</returns>
         public static byte[] ToByteArray(this object obj)
         {
             if (obj == null)
-                return null;
+                throw new ArgumentException("Caller object is null. Cannot hash null.");
 
             BinaryFormatter bf = new BinaryFormatter();
             using (MemoryStream ms = new MemoryStream())

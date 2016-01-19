@@ -10,7 +10,7 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void HllPlusBasicCountTest()
         {
-            HyperLogLog hllPlus = new HyperLogLog(16, 25);
+            HyperLogLog_Old hllPlus = new HyperLogLog_Old(16, 25);
 
             hllPlus.Add("Hello world!");
             hllPlus.Add("Hallo Welt!");
@@ -28,7 +28,7 @@ namespace CSharpHyperLogLog_Tests
         [TestMethod]
         public void HllPlusHighCountTest()
         {
-            HyperLogLog hllPlus = new HyperLogLog(16, 25);
+            HyperLogLog_Old hllPlus = new HyperLogLog_Old(16, 25);
 
             const ulong NB = 1000000;
             for (ulong i = 0; i < NB; ++i)
@@ -51,7 +51,7 @@ namespace CSharpHyperLogLog_Tests
                 "d"
             };
 
-            Assert.AreEqual(5UL, HyperLogLog.Count<string>(testList, 14, 25), "should count 5 elements");
+            Assert.AreEqual(5UL, HyperLogLog_Old.Count<string>(testList, 14, 25), "should count 5 elements");
         }
     }
 }

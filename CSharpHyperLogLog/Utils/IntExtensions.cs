@@ -99,8 +99,10 @@ namespace CSharpHyperLogLog.Utils
         {
             if (maxSize < 0)
                 throw new ArgumentException("Maximal size of number cannot be negative.");
+            /*if (maxSize > INT_SIZE)
+                throw new ArgumentException(string.Format("Maximal size of the number cannot be greater than {0}", INT_SIZE.ToString()));*/
             if (maxSize > INT_SIZE)
-                throw new ArgumentException(string.Format("Maximal size of the number cannot be greater than {0}", INT_SIZE.ToString()));
+                maxSize = INT_SIZE;
 
             return Convert.ToByte(maxSize - Convert.ToString(nb, 2).Length + 1);
         }

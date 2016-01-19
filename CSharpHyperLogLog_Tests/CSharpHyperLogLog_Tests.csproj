@@ -56,7 +56,11 @@
   <ItemGroup>
     <Compile Include="HyperLogLogPlusPlusTests.cs" />
     <Compile Include="MergeTests.cs" />
-    <Compile Include="NormalHyperLogLogTests.cs" />
+    <Compile Include="NormalHLLTests\HyperLogLogNormalTests.cs" />
+    <Compile Include="NormalHLLTests\HyperLogLogNormalPrecisionTests.cs" />
+    <Compile Include="NormalHLLTests\HyperLogLogNormalHighCardinalityTests.cs" />
+    <Compile Include="NormalHLLTests\HyperLogLogNormalMergeTests.cs" />
+    <Compile Include="NormalHLLTests\HyperLogLogNormalThreadSafenessTests.cs" />
     <Compile Include="TestsHelper.cs" />
     <Compile Include="PrecisionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

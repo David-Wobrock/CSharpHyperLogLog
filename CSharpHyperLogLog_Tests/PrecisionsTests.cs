@@ -16,7 +16,7 @@ namespace CSharpHyperLogLog_Tests
             IList<int> testPrecisions = new List<int>() { 4, 12, 16, 24, 28 };
             foreach (int p in testPrecisions)
             {
-                HyperLogLog hll = new HyperLogLog(p);
+                HyperLogLog_Old hll = new HyperLogLog_Old(p);
                 for (ulong i = 0; i < expected; ++i)
                     hll.Add(i);
 
@@ -33,7 +33,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 try
                 {
-                    HyperLogLog hll = new HyperLogLog(i);
+                    HyperLogLog_Old hll = new HyperLogLog_Old(i);
                     Assert.Fail("Should not be able to create HLL instance with precision {0}", i);
                 }
                 catch (ArgumentException ex)
@@ -47,7 +47,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 try
                 {
-                    HyperLogLog hll = new HyperLogLog(i);
+                    HyperLogLog_Old hll = new HyperLogLog_Old(i);
                     Assert.Fail("Should not be able to create HLL instance with precision {0}", i);
                 }
                 catch (ArgumentException ex)
@@ -60,7 +60,7 @@ namespace CSharpHyperLogLog_Tests
             const ulong NB_IT = 200;
             for (int i = 4; i < 29; ++i)
             {
-                HyperLogLog hll = new HyperLogLog(i);
+                HyperLogLog_Old hll = new HyperLogLog_Old(i);
                 for (ulong j = 0; j < NB_IT; ++j)
                     hll.Add(j);
                 TestsHelper.AssertRelativeError(NB_IT, hll.Cardinality);
@@ -71,7 +71,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 try
                 {
-                    HyperLogLog hll = new HyperLogLog(i);
+                    HyperLogLog_Old hll = new HyperLogLog_Old(i);
                     Assert.Fail("Should not be able to create HLL instance with precision {0}", i);
                 }
                 catch (ArgumentException ex)
@@ -92,7 +92,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 foreach (int sp in testSparsePrecisions)
                 {
-                    HyperLogLog hll = new HyperLogLog(p, sp);
+                    HyperLogLog_Old hll = new HyperLogLog_Old(p, sp);
                     for (ulong i = 0; i < expected; ++i)
                         hll.Add(i);
 
@@ -113,7 +113,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 try
                 {
-                    new HyperLogLog(p, sp);
+                    new HyperLogLog_Old(p, sp);
                     Assert.Fail("Should fail because invalid precision {0}", p);
                 }
                 catch (ArgumentException ex)
@@ -127,7 +127,7 @@ namespace CSharpHyperLogLog_Tests
             sp = 16;
             try
             {
-                new HyperLogLog(p, sp);
+                new HyperLogLog_Old(p, sp);
                 Assert.Fail("Should fail because precision {0} greater than sparse {1}", p, Math.Min(sp, 28));
             }
             catch (ArgumentException ex)
@@ -141,7 +141,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 for (p = 4; p < sp; ++p)
                 {
-                    HyperLogLog hll = new HyperLogLog(p, sp);
+                    HyperLogLog_Old hll = new HyperLogLog_Old(p, sp);
                     for (ulong i = 0; i < expected; ++i)
                         hll.Add(i);
                     TestsHelper.AssertRelativeError(expected, hll.Cardinality);
@@ -154,7 +154,7 @@ namespace CSharpHyperLogLog_Tests
             {
                 try
                 {
-                    new HyperLogLog(p, sp);
+                    new HyperLogLog_Old(p, sp);
                     Assert.Fail("Should not reach this code because sp is greater than 64.");
                 }
                 catch (ArgumentException ex)
@@ -169,7 +169,7 @@ namespace CSharpHyperLogLog_Tests
                 try
                 {
                     p = sp + 1;
-                    new HyperLogLog(p, sp);
+                    new HyperLogLog_Old(p, sp);
                     Assert.Fail("Should not reach this code because precision is greater than the sparse precision");
                 }
                 catch (ArgumentException ex)
