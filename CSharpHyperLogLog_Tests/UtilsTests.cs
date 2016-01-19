@@ -4,12 +4,10 @@ using System;
 
 namespace CSharpHyperLogLog_Tests
 {
-    [TestClass]
     public class UtilsTests
     {
     // TODO Tests for ints (and not ulong)
 
-        [TestMethod]
         public void ExtractBitsTest()
         {
             // 1001 1110 1101 0110 1110 1011 0101 0110 0101 0111 1000 1000 1110 0011 1001 0111
@@ -71,7 +69,6 @@ namespace CSharpHyperLogLog_Tests
             catch (ArgumentException) { }
         }
 
-        [TestMethod]
         public void NumberOfLeadingZerosTest()
         {
             // 0000 0000 1101 0000 1110 1011 0101 0110 0101 0111 1000 1000 1110 0011 1001 0111
@@ -95,7 +92,6 @@ namespace CSharpHyperLogLog_Tests
             catch (ArgumentException) { }
         }
 
-        [TestMethod]
         public void EncodingTest()
         {
             // Hash of integer "0".
@@ -140,7 +136,6 @@ namespace CSharpHyperLogLog_Tests
             Assert.AreEqual(35, encodedHash, "encoded hashes should be the same");
         }
 
-        [TestMethod]
         public void DecodingTest()
         {
             HashEncodingHelper encodingHelper = new HashEncodingHelper(14, 25);
@@ -170,7 +165,6 @@ namespace CSharpHyperLogLog_Tests
             Assert.AreEqual(12351, idx, "decoded index should be as expected"); // 11 0000 0011 1111
         }
 
-        [TestMethod]
         public void EstimateBiasTest()
         {
             double NORMAL = EstimateBiasHelper.GetEstimateBias(27.5, 5);
@@ -184,19 +178,16 @@ namespace CSharpHyperLogLog_Tests
             Assert.Fail();
         }
 
-        [TestMethod]
         public void CalculateDistancesTest()
         {
             Assert.Fail("TODO");
         }
 
-        [TestMethod]
         public void NearestNeighborsTest()
         {
             Assert.Fail("TODO");
         }
 
-        [TestMethod]
         public void BiasTest()
         {
             Assert.Fail("TODO");

@@ -5,10 +5,8 @@ using System.Collections.Generic;
 
 namespace CSharpHyperLogLog_Tests
 {
-    [TestClass]
     public class PrecisionsTests
     {
-        [TestMethod]
         public void HllNormalPrecisionTest()
         {
             const ulong expected = 10000;
@@ -25,7 +23,6 @@ namespace CSharpHyperLogLog_Tests
             }
         }
 
-        [TestMethod]
         public void HllNormalAllPrecisionsTest()
         {
             // Negative
@@ -81,7 +78,6 @@ namespace CSharpHyperLogLog_Tests
             }
         }
 
-        [TestMethod]
         public void HllPlusPrecisionTest()
         {
             const ulong expected = 10000;
@@ -102,7 +98,6 @@ namespace CSharpHyperLogLog_Tests
             }
         }
 
-        [TestMethod]
         public void HllPlusAllPrecisionsTest()
         {
             int p, sp;

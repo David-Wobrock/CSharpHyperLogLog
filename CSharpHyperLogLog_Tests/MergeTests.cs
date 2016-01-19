@@ -4,11 +4,9 @@ using System;
 
 namespace CSharpHyperLogLog_Tests
 {
-    [TestClass]
     public class MergeTests
     {
 
-        [TestMethod]
         public void HllPlusMergeTest()
         {
             HyperLogLog_Old hll1 = new HyperLogLog_Old(14, 25);

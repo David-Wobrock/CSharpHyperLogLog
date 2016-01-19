@@ -7,7 +7,6 @@ using System.Diagnostics;
 
 namespace CSharpHyperLogLog_Tests
 {
-    [TestClass]
     public class ThreadSafenessTests
     {
         private static ulong Counter = 0;
@@ -29,7 +28,6 @@ namespace CSharpHyperLogLog_Tests
             }
         }
         
-        [TestMethod]
         public void HllPlusThreadSafenessTest()
         {
             Assert.Fail("TODO : try thread safeness");

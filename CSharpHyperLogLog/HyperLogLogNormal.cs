@@ -5,6 +5,11 @@ using System.Linq;
 
 namespace CSharpHyperLogLog
 {
+    /// <summary>
+    /// Original HyperLogLog algorithm, implemented by Philippe Flajolet (http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf)
+    /// Some improvements from Google have been taken to created a usable livrary http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40671.pdf
+    /// Like 64 bits hash function and linear counting when estimate is small
+    /// </summary>
     public class HyperLogLogNormal : HyperLogLog
     {
         private const ushort MIN_PRECISION = 4;

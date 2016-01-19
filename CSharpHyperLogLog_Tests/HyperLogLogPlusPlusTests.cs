@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 namespace CSharpHyperLogLog_Tests
 {
-    [TestClass]
     public class HyperLogLogPlusPlusTests
     {
-        [TestMethod]
         public void HllPlusBasicCountTest()
         {
             HyperLogLog_Old hllPlus = new HyperLogLog_Old(16, 25);
@@ -25,7 +23,6 @@ namespace CSharpHyperLogLog_Tests
             Assert.AreEqual(limit+3, result, TestsHelper.GetDelta(limit+3, 25), "should count correctly small cardinalities in sparse representation");
         }
 
-        [TestMethod]
         public void HllPlusHighCountTest()
         {
             HyperLogLog_Old hllPlus = new HyperLogLog_Old(16, 25);
@@ -37,7 +34,6 @@ namespace CSharpHyperLogLog_Tests
             TestsHelper.AssertRelativeError(NB, hllPlus.Cardinality, "should have converted to a normal/dense representation");
         }
 
-        [TestMethod]
         public void HllPlusCountListTest()
         {
             IList<string> testList = new List<string>()
