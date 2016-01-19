@@ -10,6 +10,8 @@ namespace CSharpHyperLogLog
         protected readonly double AlphaMM;
         protected byte[] Registers;
 
+        protected object RegisterLock = new object();
+
         public HyperLogLog(ushort precision)
         {
             Precision = precision;
@@ -29,10 +31,13 @@ namespace CSharpHyperLogLog
         {
             bool isGreater = true;
 
-            if (register >= newValue)
-                isGreater = false;
-            else
-                register = newValue;
+            lock(RegisterLock)
+            {
+                if (register >= newValue)
+                    isGreater = false;
+                else
+                    register = newValue;
+            }
 
             return isGreater;
         }

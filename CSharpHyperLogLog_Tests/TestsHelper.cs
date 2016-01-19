@@ -46,9 +46,9 @@ namespace CSharpHyperLogLog_Tests
         /// <param name="message"></param>
         public static void AssertRelativeError(ulong expected, ulong actual, string message = null)
         {
-            const double testedRelativeError = 0.15;
+            const double testedRelativeError = 0.1;
 
-            double realError = (actual > expected ? actual - expected : expected - actual) / (double)expected;
+            double realError = GetRelativeError(expected, actual);
 
             if (string.IsNullOrWhiteSpace(message))
                 message = string.Format("{0} error should be lower than {1}", realError, testedRelativeError);

@@ -2,6 +2,7 @@
 using CSharpHyperLogLog.Utils;
 using CSharpHyperLogLog.Hash;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CSharpHyperLogLog
 {
@@ -33,18 +34,25 @@ namespace CSharpHyperLogLog
             {
                 double sum = 0D;
                 int emptyRegisters = 0;
-                foreach (byte r in Registers)// TODO parallel ?
+                object sumLock = new object();
+
+                lock(RegisterLock)
                 {
-                    sum += 1D / (1 << r); // 2^-r = (2^r)^-1 = 1/(2^r)
-                    if (r == 0)
-                        ++emptyRegisters;
+                    // 2^-r = (2^r)^-1 = 1/(2^r)
+                    sum = Registers.AsParallel().Sum(reg => 1D / (1 << reg));
                 }
 
                 double estimate = AlphaMM * (1 / sum);
 
                 double result;
                 if (estimate <= 2.5 * M)
+                {
+                    lock(RegisterLock)
+                    {
+                        emptyRegisters = Registers.AsParallel().Count(reg => reg == 0);
+                    }
                     result = LinearCounting(Convert.ToInt32(M), emptyRegisters);
+                }
                 else
                     result = estimate;
 
@@ -84,6 +92,7 @@ namespace CSharpHyperLogLog
         private bool Merge(HyperLogLogNormal hll)
         {
             bool modified = false;
+
             for (uint i = 0; i < hll.Registers.Count(); ++i)
                 if (UpdateIfGreater(ref Registers[i], hll.Registers[i]))
                     modified = true;

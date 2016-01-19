@@ -50,7 +50,7 @@ namespace CSharpHyperLogLog_Tests.NormalHLLTests
                 threads[i].Join();
 
             // Assert
-            TestsHelper.AssertRelativeError(expected, hllThreaded.Cardinality, PRECISION);
+            TestsHelper.AssertRelativeError(expected, hllThreaded.Cardinality);
         }
     }
 }
