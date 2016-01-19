@@ -22,10 +22,15 @@ namespace CSharpHyperLogLog_Tests
             return 1.04 / (Math.Sqrt(Math.Pow(2, precision)));
         }
 
+        public static double GetRelativeError(ulong expected, ulong actual)
+        {
+            return (actual > expected ? actual - expected : expected - actual) / (double)expected;
+        }
+
         public static void AssertRelativeError(ulong expected, ulong actual, int precision, string message = null)
         {
             double expectedError = GetAccuracy(precision);
-            double realError = (actual > expected ? actual - expected : expected - actual) / (double)expected;
+            double realError = GetRelativeError(expected, actual);
 
             if (string.IsNullOrWhiteSpace(message))
                 message = string.Format("{0} error should be lower than {1} (precision {2})", realError, expectedError, precision);

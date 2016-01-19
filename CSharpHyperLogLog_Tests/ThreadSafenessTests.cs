@@ -28,32 +28,7 @@ namespace CSharpHyperLogLog_Tests
                 hll.Add(GetCounter());
             }
         }
-
-        [TestMethod]
-        public void HllNormalThreadSafenessTest()
-        {
-            const int NB_THREADS = 100;
-            const int ITERATIONS = 500;
-            const int PRECISION = 14;
-            ulong expected = NB_THREADS * ITERATIONS;
-
-            HyperLogLog_Old hllThreaded = new HyperLogLog_Old(PRECISION);
-            // Launch all threads
-            IList<Thread> threads = new List<Thread>();
-            for (int i = 0; i < NB_THREADS; ++i)
-            {
-                Thread t = new Thread(() => ThreadTask(hllThreaded, ITERATIONS));
-                threads.Add(t);
-                t.Start();
-            }
-            // Wait for threads
-            for (int i = 0; i < NB_THREADS; ++i)
-                threads[i].Join();
-
-            // Assert
-            TestsHelper.AssertRelativeError(expected, hllThreaded.Cardinality);
-        }
-
+        
         [TestMethod]
         public void HllPlusThreadSafenessTest()
         {

@@ -13,7 +13,9 @@ namespace CSharpHyperLogLog_Tests.NormalHLLTests
             foreach (int i in TestsHelper.GetOneMillionDifferentElements())
                 hll.Add(i);
 
-            TestsHelper.AssertRelativeError(1000000UL, hll.Cardinality, 14);
+            // Test is with precision 14, so relative error is around 1.04 / sqrt(2^14) = 0.008125
+
+            Assert.IsTrue(TestsHelper.GetRelativeError(1000000UL, hll.Cardinality) < 0.009, "relative error should be around 0.008125 (inferior to 0.009 at least)");
         }
     }
 }

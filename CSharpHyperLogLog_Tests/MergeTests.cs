@@ -8,7 +8,6 @@ namespace CSharpHyperLogLog_Tests
     public class MergeTests
     {
 
-
         [TestMethod]
         public void HllPlusMergeTest()
         {
