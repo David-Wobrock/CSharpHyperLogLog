@@ -13,19 +13,19 @@ namespace CSharpHyperLogLog
     /// </summary>
     public class HyperLogLogNormal : HyperLogLog
     {
-        private const ushort MIN_PRECISION = 4;
-        private const ushort MAX_PRECISION = 28;
         private const double MAX_USED_MEMORY = (1 << MAX_PRECISION) / 1000000D;
 
         private static readonly IHasher Hasher = new Murmur3();
 
-        public HyperLogLogNormal(ushort precision)
+        public HyperLogLogNormal(byte precision)
             : base(precision)
         {
             if (precision < MIN_PRECISION)
                 throw new ArgumentException(string.Format("A precision below {0} is useless. You won't be able to estimate any collections.", MIN_PRECISION));
             if (precision > MAX_PRECISION)
                 throw new ArgumentException(string.Format("A precision above {0} will use too much memory (~{1} MegaBytes).", MAX_PRECISION, MAX_USED_MEMORY));
+
+            Registers = new byte[M];
         }
 
         public override ulong Cardinality

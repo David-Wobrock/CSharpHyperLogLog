@@ -5,18 +5,20 @@ namespace CSharpHyperLogLog
 {
     public abstract class HyperLogLog
     {
-        protected readonly ushort Precision;
+        protected const ushort MIN_PRECISION = 4;
+        protected const ushort MAX_PRECISION = 28;
+
+        protected readonly byte Precision;
         protected readonly uint M;
         protected readonly double AlphaMM;
         protected byte[] Registers;
 
         protected object RegisterLock = new object();
 
-        public HyperLogLog(ushort precision)
+        public HyperLogLog(byte precision)
         {
             Precision = precision;
             M = 1U << precision;
-            Registers = new byte[M];
             AlphaMM = Alpha * M * M;
         }
 

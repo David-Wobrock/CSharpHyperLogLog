@@ -14,7 +14,7 @@ namespace CSharpHyperLogLog_Tests.NormalHLLTests
             const ulong expected = 10000;
 
             IList<int> testPrecisions = new List<int>() { 4, 12, 16, 24, 28 };
-            foreach (ushort p in testPrecisions)
+            foreach (byte p in testPrecisions)
             {
                 HyperLogLog hll = new HyperLogLogNormal(p);
                 for (ulong i = 0; i < expected; ++i)
