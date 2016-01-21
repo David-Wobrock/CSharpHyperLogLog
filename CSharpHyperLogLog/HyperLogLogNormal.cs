@@ -86,7 +86,8 @@ namespace CSharpHyperLogLog
             if (Precision != hllN.Precision)
                 throw new ArgumentException("Both hyperloglog instances must have the same precision");
 
-            return Merge(hllN);
+            bool smthingHasBeenModified = Merge(hllN);
+            return smthingHasBeenModified;
         }
 
         private bool Merge(HyperLogLogNormal hll)
