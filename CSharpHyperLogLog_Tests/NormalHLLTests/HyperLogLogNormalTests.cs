@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpHyperLogLog;
+using System.Collections.Generic;
 
 namespace CSharpHyperLogLog_Tests
 {
@@ -68,6 +69,20 @@ namespace CSharpHyperLogLog_Tests
             Assert.IsFalse(hll.Add("a"), "should not alter a register");
 
             Assert.AreEqual(3UL, hll.Cardinality, "should count 3 elements");
+        }
+
+        [TestMethod]
+        public void HllNormalCountDifferentValuesTest()
+        {
+            IList<ulong> testedValues = new List<ulong> { 10, 200, 10000, 30000, 100000 };
+            
+            foreach (ulong value in testedValues)
+            {
+                hll = new HyperLogLogNormal(14);
+                for (ulong i = 0; i < value; ++i)
+                    hll.Add(i);
+                TestsHelper.AssertRelativeError(value, hll.Cardinality);
+            }
         }
     }
 }
