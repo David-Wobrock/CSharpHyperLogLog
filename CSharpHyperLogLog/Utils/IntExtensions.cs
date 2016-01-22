@@ -9,8 +9,8 @@ namespace CSharpHyperLogLog.Utils
     /// </summary>
     internal static class IntExtensions
     {
-        public const int LONG_SIZE = 64;
-        public const int INT_SIZE = 32;
+        public const byte LONG_SIZE = 64;
+        public const byte INT_SIZE = 32;
 
         public static ulong RotateLeft(this ulong original, int bits)
         {
@@ -62,6 +62,8 @@ namespace CSharpHyperLogLog.Utils
         {
             if (beginningIdx < 0)
                 throw new ArgumentException("Beginning index must be positive or zero.");
+            /*if (endingIdx == beginningIdx)
+                return 0;*/
             if (endingIdx <= beginningIdx)
                 throw new ArgumentException("The ending index must be greater than the beginning one.");
             if (endingIdx > INT_SIZE)
@@ -81,7 +83,7 @@ namespace CSharpHyperLogLog.Utils
             if (maxSize < 0)
                 throw new ArgumentException("Maximal size of number cannot be negative.");
             if (maxSize > LONG_SIZE)
-                throw new ArgumentException("Maximal size of number cannot be greater than {0}", LONG_SIZE.ToString());
+                maxSize = LONG_SIZE;
 
             // Convert.ToString(long, 2) gives the binary reprensentation, beginning with the first 1 (leading zeros are trimmed like a usual integer)
             // Casting the ulong to long doesn't matter because the binary representation doesn't change
@@ -99,8 +101,6 @@ namespace CSharpHyperLogLog.Utils
         {
             if (maxSize < 0)
                 throw new ArgumentException("Maximal size of number cannot be negative.");
-            /*if (maxSize > INT_SIZE)
-                throw new ArgumentException(string.Format("Maximal size of the number cannot be greater than {0}", INT_SIZE.ToString()));*/
             if (maxSize > INT_SIZE)
                 maxSize = INT_SIZE;
 

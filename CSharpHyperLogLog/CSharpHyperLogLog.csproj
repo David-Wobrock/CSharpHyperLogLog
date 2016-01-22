@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Hash\IHasher.cs" />
     <Compile Include="Hash\Murmur3.cs" />
+    <Compile Include="HyperLogLogPlusPlus.cs" />
     <Compile Include="HyperLogLog_Old.cs" />
     <Compile Include="HyperLogLogNormal.cs" />
     <Compile Include="HyperLogLog.cs" />

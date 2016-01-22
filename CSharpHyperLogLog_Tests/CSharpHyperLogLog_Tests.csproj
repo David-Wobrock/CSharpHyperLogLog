@@ -54,18 +54,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="HyperLogLogPlusPlusTests.cs" />
-    <Compile Include="MergeTests.cs" />
     <Compile Include="NormalHLLTests\HyperLogLogNormalTests.cs" />
     <Compile Include="NormalHLLTests\HyperLogLogNormalPrecisionTests.cs" />
     <Compile Include="NormalHLLTests\HyperLogLogNormalHighCardinalityTests.cs" />
     <Compile Include="NormalHLLTests\HyperLogLogNormalMergeTests.cs" />
     <Compile Include="NormalHLLTests\HyperLogLogNormalThreadSafenessTests.cs" />
+    <Compile Include="PlusPlusHLLTests\HyperLogLogPlusPlusTests.cs" />
+    <Compile Include="PlusPlusHLLTests\HyperLogLogPlusPlusPrecisionTests.cs" />
+    <Compile Include="PlusPlusHLLTests\HyperLogLogPlusPlusMergeTests.cs" />
     <Compile Include="TestsHelper.cs" />
-    <Compile Include="PrecisionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThreadSafenessTests.cs" />
-    <Compile Include="UtilsTests.cs" />
+    <Compile Include="UtilsTests\HashEncodingTests.cs" />
+    <Compile Include="UtilsTests\IntExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpHyperLogLog\CSharpHyperLogLog.csproj">
@@ -73,6 +73,7 @@
       <Name>CSharpHyperLogLog</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

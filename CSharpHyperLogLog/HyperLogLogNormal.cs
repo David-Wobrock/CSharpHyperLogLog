@@ -34,7 +34,6 @@ namespace CSharpHyperLogLog
             {
                 double sum = 0D;
                 int emptyRegisters = 0;
-                object sumLock = new object();
 
                 lock(RegisterLock)
                 {

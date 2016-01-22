@@ -206,8 +206,7 @@ namespace CSharpHyperLogLog
                         RegistersMutex.ReleaseMutex();
 
                         double estimate = AlphaMM * (1 / sum);
-                        //double estimatePrime = estimate <= 5 * M ? estimate - EstimateBiasHelper.GetEstimateBias(estimate, Precision) : estimate;
-                        double estimatePrime = estimate <= 5 * M ? estimate - EstimateBiasHelper.GetEstimateBias_FromJava(estimate, Precision) : estimate;
+                        double estimatePrime = estimate <= 5 * M ? estimate - EstimateBiasHelper.GetEstimateBias(estimate, Precision) : estimate;
                         
                         double H;
                         if (emptyRegisters != 0)

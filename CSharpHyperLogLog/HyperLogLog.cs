@@ -68,5 +68,9 @@ namespace CSharpHyperLogLog
         {
             return m * Math.Log(m / v);
         }
+        protected static double LinearCounting(ulong m, double v)
+        {
+            return m * Math.Log(m / v);
+        }
     }
 }
