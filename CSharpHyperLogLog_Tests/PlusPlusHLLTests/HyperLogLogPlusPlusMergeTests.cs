@@ -54,7 +54,7 @@ namespace CSharpHyperLogLog_Tests.PlusPlusHLLTests
                 hll2.Add(i);
 
             Assert.IsTrue(hll1.Merge(hll2), "Merge should alter some registers and return true");
-            TestsHelper.AssertRelativeError(300000UL, hll1.Cardinality, "Cardinality after merge should approximatively be as expected");
+            TestsHelper.AssertRelativeError(300000UL, hll1.Cardinality);
         }
 
         [TestMethod]

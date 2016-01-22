@@ -25,6 +25,11 @@ namespace CSharpHyperLogLog
 
         private readonly HashEncodingHelper HashEncoder;
 
+        /// <summary>
+        /// Creates a hyperloglog++ instance.
+        /// </summary>
+        /// <param name="precision">The higher the precision, the higher the accuracy, but also the memory usage. Must be in [4, max(28, sparsePrecision)].</param>
+        /// <param name="sparsePrecision">The precision of the sparse representation. Must be inferior or equal to 63.</param>
         public HyperLogLogPlusPlus(byte precision, byte sparsePrecision)
             : base(precision)
         {

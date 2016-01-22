@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace CSharpHyperLogLog
 {
     /// <summary>
-    /// Original HyperLogLog algorithm, implemented by Philippe Flajolet (http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf)
+    /// Original HyperLogLog algorithm, described by Philippe Flajolet (http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf)
     /// Some improvements from Google have been taken to created a usable livrary http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40671.pdf
-    /// Like 64 bits hash function and linear counting when estimate is small
+    /// Like 64 bits hash function and linear counting when the estimate is small
     /// </summary>
     public class HyperLogLogNormal : HyperLogLog
     {
@@ -17,6 +17,13 @@ namespace CSharpHyperLogLog
 
         private static readonly IHasher Hasher = new Murmur3();
 
+        /// <summary>
+        /// Constructor for the basic HyperLogLog algorithm by Philippe Flajolet.
+        /// </summary>
+        /// <param name="precision">
+        /// Determines the number of registers. The higher the precision, the more accurate the algorithm is,
+        /// but also the most memory it uses. The precision must be between 4 and 28.
+        /// </param>
         public HyperLogLogNormal(byte precision)
             : base(precision)
         {

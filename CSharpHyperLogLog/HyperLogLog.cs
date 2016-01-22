@@ -11,6 +11,9 @@ namespace CSharpHyperLogLog
         protected readonly byte Precision;
         protected readonly uint M;
         protected readonly double AlphaMM;
+
+        // We use the "byte" type because the size of each register must be log2(log2(N)), when cardinalities <= N.
+        // Since we use hashed values on 64 bits, N = 2^64. So, log2(log2(2^64)) = 6. So we only need 6 bits
         protected byte[] Registers;
 
         protected object RegisterLock = new object();
