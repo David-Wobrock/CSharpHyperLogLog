@@ -1,5 +1,4 @@
-﻿using CSharpHyperLogLog.Hash;
-using System;
+﻿using System;
 
 namespace CSharpHyperLogLog
 {
